@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche d'articles Blog du Modérateur</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .list-group-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        img {
+            object-fit: cover;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+    <h1 class="mb-4">🔍 Recherche d'articles Blog du Modérateur</h1>
+    
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input class="form-control" name="auteur" placeholder="Auteur">
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" name="titre" placeholder="Mot dans le titre">
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" name="categorie" placeholder="Catégorie/sous-catégorie">
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" type="date" name="date_debut">
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" type="date" name="date_fin">
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+    </form>
+
+    {% if articles %}
+        <h4>{{ articles|length }} article(s) trouvé(s) :</h4>
+        <ul class="list-group">
+            {% for article in articles %}
+            <li class="list-group-item">
+                {% if article.images and article.images[0].url %}
+                <img src="{{ article.images[0].url }}" alt="{{ article.images[0].alt }}" width="100" class="rounded border">
+                {% endif %}
+                <div>
+                    <strong>{{ article.titre }}</strong> <br>
+                    <small>{{ article.date or "Inconnue" }} — {{ article.auteur or "Auteur non trouvé" }}</small> <br>
+                    <a href="{{ article.url }}" target="_blank">🔗 Voir l'article</a>
+
+                    {% if article.contenu %}
+                    <p class="mt-2 text-muted">{{ article.contenu[:250] }}...</p>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+</body>
+</html>
